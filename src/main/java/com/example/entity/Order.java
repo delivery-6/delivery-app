@@ -1,6 +1,7 @@
 package com.example.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -30,10 +31,12 @@ public class Order {
     )
     private List<Menu> menus;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private OrderState state;
 
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -41,6 +44,6 @@ public class Order {
 
 
     public enum OrderState {
-        PENDING, COMPLETED, CANCELLED
+       NONE,ORDERED,APPROVED,DELIVERING, DELIVERED, REJECTED, CANCELED
     }
 }

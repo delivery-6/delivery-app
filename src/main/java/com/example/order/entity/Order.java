@@ -1,5 +1,4 @@
 package com.example.order.entity;
-import com.example.User.Entity.User;
 import com.example.menu.entity.Menu;
 import com.example.user.entity.User;
 import jakarta.persistence.*;
@@ -25,14 +24,9 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderMenu> orderMenus;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_menu", // 중간 테이블 이름
-            joinColumns = @JoinColumn(name = "order_id"), // 현재 엔티티(Order)의 외래 키
-            inverseJoinColumns = @JoinColumn(name = "menu_id") // 대상 엔티티(Menu)의 외래 키
-    )
-    private List<Menu> menus;
 
     @Setter
     @Enumerated(EnumType.STRING)

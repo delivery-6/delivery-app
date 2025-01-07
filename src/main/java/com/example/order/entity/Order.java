@@ -1,4 +1,7 @@
-package com.example.entity;
+package com.example.order.entity;
+import com.example.User.Entity.User;
+import com.example.menu.entity.Menu;
+import com.example.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

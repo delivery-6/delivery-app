@@ -1,38 +1,31 @@
-package com.example.entity;
+package com.example.shop.entity;
+
+import com.example.User.Entity.User;
+import com.example.user.entity.User;
+import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Getter
-@Table(name = "reviews")
+@Table(name = "shops")
 @Entity
-public class Review {
+public class Shop {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private Shop shop;
-
     @Setter
-    @Column(nullable = false)
-    private Integer rating;
-
-    @Setter
-    @Column(length = 50)
-    private String description;
+    @Column(nullable = false, length = 10)
+    private String name;
 
     @Column(updatable = false)
     @CreatedDate
@@ -40,4 +33,8 @@ public class Review {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @Setter
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
 }

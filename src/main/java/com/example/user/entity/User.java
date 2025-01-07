@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.user.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

@@ -3,11 +3,12 @@ package com.example.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+@Getter
+@Table(name = "shops")
 @Entity
 public class Shop {
     @Id
@@ -23,6 +24,6 @@ public class Shop {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
-    @SoftDelete
-    private Boolean isDeleted;
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
 }

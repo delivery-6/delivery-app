@@ -16,24 +16,29 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Setter
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String name;
 
     @Setter
-    @Column(nullable = false, length = 50, unique = true)
-    @Email(message = "이메일 형식이 맞지 않습니다.") // 이메일 형식 검증
-    @NotNull(message = "이메일을 입력하여 주세요.") // null 방지
+    @Column(nullable = false, unique = true)
+    @Email
+    @NotNull
     private String email;
 
     @Setter
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String password;
 
     @Setter
     private Boolean isOwner;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Setter
+    private Role role;
 
     @Column(updatable = false)
     @CreatedDate

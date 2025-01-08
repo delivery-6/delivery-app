@@ -1,5 +1,4 @@
 package com.example.review.entity;
-import com.example.User.Entity.User;
 import com.example.user.entity.User;
 import com.example.shop.entity.Shop;
 import jakarta.persistence.*;
@@ -9,15 +8,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Table(name = "reviews")
 @Entity
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

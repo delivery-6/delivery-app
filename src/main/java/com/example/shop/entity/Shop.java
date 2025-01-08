@@ -1,6 +1,5 @@
 package com.example.shop.entity;
 
-import com.example.User.Entity.User;
 import com.example.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Setter
     @ManyToOne

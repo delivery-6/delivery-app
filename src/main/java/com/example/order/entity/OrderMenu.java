@@ -2,14 +2,12 @@ package com.example.order.entity;
 
 import com.example.menu.entity.Menu;
 import jakarta.persistence.*;
-import org.aspectj.weaver.ast.Or;
 
-import java.util.UUID;
 
 @Entity
 public class OrderMenu {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne

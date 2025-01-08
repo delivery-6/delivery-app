@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "shop_id", nullable = false)

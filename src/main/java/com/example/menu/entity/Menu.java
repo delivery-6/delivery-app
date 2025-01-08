@@ -56,6 +56,7 @@ public class Menu {
         return this;
     }
 
+    //DTO 를 Entity 로 바꾸기 위한 Util method
     public static Menu from(Shop shop, MenuCreateRequestDto dto){
         return new Menu(
                 shop,

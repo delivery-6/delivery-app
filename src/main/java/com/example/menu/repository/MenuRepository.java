@@ -19,10 +19,10 @@ interface MenuQueryRepository {
 }
 
 @Repository
-class MenuQueryRepositoryImpl implements MenuQueryRepository {
+class MenuRepositoryImpl implements MenuQueryRepository {
     private final JPQLQueryFactory queryFactory;
 
-    public MenuQueryRepositoryImpl(JPQLQueryFactory queryFactory) {
+    public MenuRepositoryImpl(JPQLQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
 

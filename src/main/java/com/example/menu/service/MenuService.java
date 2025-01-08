@@ -68,6 +68,7 @@ public class MenuService {
 
     public void delete(int menuId){
         menuRepository.deleteById(menuId);
+
     }
 
     //TODO: 인증 구현 후, 세션을 이용해 유저를 가져오는 작업을 추가해야 합니다.

@@ -1,5 +1,4 @@
 package com.example.review.entity;
-import com.example.User.Entity.User;
 import com.example.user.entity.User;
 import com.example.shop.entity.Shop;
 import jakarta.persistence.*;

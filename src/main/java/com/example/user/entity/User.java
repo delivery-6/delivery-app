@@ -35,6 +35,10 @@ public class User {
     @Setter
     private Boolean isOwner;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;

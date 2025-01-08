@@ -1,18 +1,23 @@
 package com.example.order.entity;
+
 import com.example.menu.entity.Menu;
 import com.example.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Table(name = "orders")
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     @Id
@@ -24,12 +29,10 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderMenu> orderMenus;
+    private List<OrderMenu> orderMenus = List.of();
 
-
-    @Setter
     @Enumerated(EnumType.STRING)
-    private OrderState state;
+    private OrderState state = OrderState.NONE;
 
     @CreatedDate
     @Column(updatable = false)
@@ -38,8 +41,56 @@ public class Order {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public Order(User user) {
+
+    }
 
     public enum OrderState {
-       NONE,ORDERED,APPROVED,DELIVERING, DELIVERED, REJECTED, CANCELED
+        NONE(0),
+        ORDERED(1),
+        APPROVED(2),
+        REJECTED(3),
+        DELIVERING(4),
+        DELIVERED(5),
+        CANCELED(6);
+
+        public final int id;
+
+        OrderState(int value) {
+            this.id = value;
+        }
+
+        public static OrderState of(byte id) {
+            for (OrderState type : values()) {
+                if (type.id == id) {
+                    return type;
+                }
+            }
+            //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
+            throw new IllegalArgumentException("No OrderState with id: " + id);
+        }
+
+        public static boolean isUpdatable(OrderState from, OrderState to) {
+            return from.id < to.id;
+        }
+    }
+
+    public void updateState(OrderState state) {
+        if (OrderState.isUpdatable(this.state, state))
+            //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
+            throw new IllegalStateException("OrderState cannot be update from " + this.state + " to " + state);
+        this.state = state;
+    }
+
+    public static Order from(Map<Menu, Integer> menuInfo, User user) {
+        Order order = new Order(user);
+        order.registerMenus(menuInfo);
+        return order;
+    }
+
+    private void registerMenus(Map<Menu, Integer> menuInfo) {
+        menuInfo.forEach((menu, quantity) ->
+                this.orderMenus.add(new OrderMenu(this, menu, quantity))
+        );
     }
 }

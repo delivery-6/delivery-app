@@ -67,6 +67,9 @@ dependencies {
 
     // Spring Boot DevTools: 개발 중 핫 리로딩 지원
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Spring Dotenv: .env 파일 지원 라이브러리 추가
+    implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 }
 
 tasks.named('test') {

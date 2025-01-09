@@ -1,41 +1,23 @@
 package com.example.auth.controller;
 
-import com.example.auth.dto.AuthRequest;
-import com.example.user.entity.User;
-import com.example.user.repository.UserRepository;
-import com.example.utils.JwtUtil;
+import com.example.auth.dto.LoginRequestDto;
+import com.example.auth.service.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public AuthController(JwtUtil jwtUtil, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody AuthRequest authRequest) {
-        // 사용자 정보 로드
-        User user = userRepository.findByEmail(authRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
-
-        // 비밀번호 검증
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
-        }
-
-        // JWT 토큰 생성
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getAuthority());
+    public ResponseEntity<Void> login(@RequestBody LoginRequestDto authRequest) {
+        // AuthService를 통해 인증 및 토큰 생성
+        String token = authService.authenticate(authRequest);
 
         // Authorization 헤더에 토큰 추가
         HttpHeaders headers = new HttpHeaders();
@@ -47,3 +29,4 @@ public class AuthController {
                 .build();
     }
 }
+

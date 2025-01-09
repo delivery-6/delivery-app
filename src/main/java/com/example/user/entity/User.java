@@ -1,54 +1,57 @@
 package com.example.user.entity;
+
+import com.example.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 @Getter
-@Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User {
+@Table(name = "users")
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Setter
+    @NotBlank
     @Column(nullable = false)
     private String name;
 
-    @Setter
-    @Column(nullable = false, unique = true)
+    @NotBlank
     @Email
-    @NotNull
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Setter
+    @NotBlank
     @Column(nullable = false)
     private String password;
 
-    @Setter
-    private Boolean isOwner;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     @Column(nullable = false)
-    @Setter
     private Role role;
 
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @Builder
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role != null ? role : Role.NONE;
+    }
 
-    @Setter
-    @Column(nullable = false)
-    private Boolean isDeleted = false;
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 
+    public void softDelete() {
+        this.isDeleted = true;
+    }
 }

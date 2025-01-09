@@ -6,6 +6,7 @@ import com.example.menu.dto.response.MenuResponseDetailDto;
 import com.example.menu.dto.response.MenuResponseSimpleDto;
 import com.example.menu.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +18,28 @@ public class MenuController {
     private MenuService menuService;
 
     @GetMapping("{id}")
-    public MenuResponseDetailDto find(int id){
-        return menuService.find(id);
+    public ResponseEntity<MenuResponseDetailDto> find(int id){
+        return ResponseEntity.ok(menuService.find(id));
     }
 
     @GetMapping
-    public List<MenuResponseSimpleDto> findAll(int shopId){
-        return menuService.findAll(shopId);
+    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(int shopId){
+        return ResponseEntity.ok(menuService.findAll(shopId));
     }
 
     @PostMapping
-    public MenuResponseDetailDto create(int shopId, MenuCreateRequestDto dto){
-        return menuService.create(shopId, dto);
+    public ResponseEntity<MenuResponseDetailDto> create(int shopId, MenuCreateRequestDto dto){
+        return ResponseEntity.ok(menuService.create(shopId, dto));
     }
 
     @PutMapping("{id}")
-    public MenuResponseDetailDto update(int id, MenuUpdateRequestDto dto){
-        return menuService.update(id, dto);
+    public ResponseEntity<MenuResponseDetailDto> update(int id, MenuUpdateRequestDto dto){
+        return ResponseEntity.ok(menuService.update(id, dto));
     }
 
     @DeleteMapping("{id}")
-    public void delete(int id){
+    public ResponseEntity<Void> delete(int id){
         menuService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

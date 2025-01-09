@@ -27,7 +27,7 @@ public class ShopService {
     public ShopReadResponseDto find(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("Shop not found with ID: " + id);
+            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
         }
         return ShopReadResponseDto.from(shop);
     }
@@ -44,16 +44,16 @@ public class ShopService {
     public ShopReadResponseDto create(ShopCreateRequestDto dto) {
         // 인증된 사용자 가져오기
         User user = userRepository.findById(AuthUtil.getId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + AuthUtil.getId()));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다." + AuthUtil.getId()));
 
         // is_owner 여부 확인 및 가게 개수 제한
         if (!user.getIsOwner()) {
-            throw new IllegalArgumentException("You are not authorized to create a shop.");
+            throw new IllegalArgumentException("가게를 생성할 권한이 없습니다.");
         }
 
         long shopCount = shopRepository.countByUserAndIsDeletedFalse(user);
         if (shopCount >= 3) {
-            throw new IllegalArgumentException("You can only create up to 3 shops.");
+            throw new IllegalArgumentException("최대 3개의 상점만 만들 수 있습니다.");
         }
 
         // 가게 생성
@@ -67,7 +67,7 @@ public class ShopService {
     public ShopReadResponseDto partialUpdate(int id, ShopUpdateRequestDto dto) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("Shop not found with ID: " + id);
+            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
         }
 
         shop.updateDetails(dto.name(), dto.openingHours(), dto.closingHours(), dto.minOrderAmount());
@@ -79,7 +79,7 @@ public class ShopService {
     public void delete(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("Shop not found with ID: " + id);
+            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
         }
 
         shop.markAsDeleted();

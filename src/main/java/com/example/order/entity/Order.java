@@ -42,37 +42,8 @@ public class Order {
     private LocalDateTime updatedAt;
 
     public Order(User user) {
-
-    }
-
-    public enum OrderState {
-        NONE(0),
-        ORDERED(1),
-        APPROVED(2),
-        REJECTED(3),
-        DELIVERING(4),
-        DELIVERED(5),
-        CANCELED(6);
-
-        public final int id;
-
-        OrderState(int value) {
-            this.id = value;
-        }
-
-        public static OrderState of(byte id) {
-            for (OrderState type : values()) {
-                if (type.id == id) {
-                    return type;
-                }
-            }
-            //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
-            throw new IllegalArgumentException("No OrderState with id: " + id);
-        }
-
-        public static boolean isUpdatable(OrderState from, OrderState to) {
-            return from.id < to.id;
-        }
+        this.user = user;
+        this.state = OrderState.NONE;
     }
 
     public void updateState(OrderState state) {
@@ -82,7 +53,10 @@ public class Order {
         this.state = state;
     }
 
-    public static Order from(Map<Menu, Integer> menuInfo, User user) {
+    public static Order from(
+            Map<Menu, Integer> menuInfo,
+            User user
+    ) {
         Order order = new Order(user);
         order.registerMenus(menuInfo);
         return order;

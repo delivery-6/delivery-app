@@ -1,20 +1,19 @@
-package com.example.order.dto;
+package com.example.order.dto.response;
 
 import com.example.order.entity.Order;
-import com.example.order.entity.OrderMenu;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public record OrderResponseDTO(
+public record OrderResponseDto(
         int id,
         String username,
         String shopName,
         Map<String, Integer> menuInfo,
         int totalPrice
 ) {
-    public static OrderResponseDTO from(Order order) {
-        return new OrderResponseDTO(
+    public static OrderResponseDto from(Order order) {
+        return new OrderResponseDto(
                 order.getId(),
                 order.getUser().getName(),
                 //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.

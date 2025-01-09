@@ -5,6 +5,7 @@ import com.example.order.entity.OrderMenu;
 import com.querydsl.jpa.JPQLQueryFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 import static com.example.menu.entity.QMenu.menu;
@@ -18,7 +19,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, OrderQue
 
 interface OrderQueryRepository {
     List<Order> findAllByUserId(int id);
+
+    List<Order> findAllByShopId(int id);
+
     OrderMenu findOrderMenu(int id);
+
     List<OrderMenu> findAllOrderMenusByOrderId(int id);
 }
 
@@ -36,6 +41,16 @@ class OrderRepositoryImpl implements OrderQueryRepository {
                 .selectFrom(order)
                 .join(order.user, user).fetchJoin()
                 .where(order.user.id.eq(id))
+                .fetch();
+    }
+
+    @Override
+    public List<Order> findAllByShopId(int id) {
+        return queryFactory
+                .selectFrom(order)
+                .join(order.orderMenus, orderMenu).fetchJoin()
+                .join(order.user).fetchJoin()
+                .where(orderMenu.menu.shop.id.eq(id))
                 .fetch();
     }
 

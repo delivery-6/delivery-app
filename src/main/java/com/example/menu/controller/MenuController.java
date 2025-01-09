@@ -18,27 +18,33 @@ public class MenuController {
     private MenuService menuService;
 
     @GetMapping("{id}")
-    public ResponseEntity<MenuResponseDetailDto> find(int id){
+    public ResponseEntity<MenuResponseDetailDto> find(@PathVariable int id){
         return ResponseEntity.ok(menuService.find(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(int shopId){
+    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(@PathVariable int shopId){
         return ResponseEntity.ok(menuService.findAll(shopId));
     }
 
     @PostMapping
-    public ResponseEntity<MenuResponseDetailDto> create(int shopId, MenuCreateRequestDto dto){
+    public ResponseEntity<MenuResponseDetailDto> create(
+            @PathVariable int shopId,
+            @RequestBody MenuCreateRequestDto dto
+    ){
         return ResponseEntity.ok(menuService.create(shopId, dto));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<MenuResponseDetailDto> update(int id, MenuUpdateRequestDto dto){
+    public ResponseEntity<MenuResponseDetailDto> update(
+            @PathVariable int id,
+            @RequestBody MenuUpdateRequestDto dto
+    ){
         return ResponseEntity.ok(menuService.update(id, dto));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(int id){
+    public ResponseEntity<Void> delete(@PathVariable int id){
         menuService.delete(id);
         return ResponseEntity.noContent().build();
     }

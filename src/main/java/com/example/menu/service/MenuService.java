@@ -23,12 +23,6 @@ public class MenuService {
     @Autowired
     private UserRepository userRepository;
 
-    //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
-    private final User authUser = userRepository.findById(AuthUtil.getId())
-            .orElseThrow(() ->
-                    new NullPointerException("User not found with ID: " + AuthUtil.getId())
-            );
-
     public MenuResponseDetailDto find(int id) {
         //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
         Menu menu = menuRepository.findById(id).orElseThrow();
@@ -53,7 +47,7 @@ public class MenuService {
          * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
          **/
         Shop shop = new Shop();
-        if (shop.getUser().getId() != authUser.getId()) {
+        if (shop.getUser().getId() != getAuthUser().getId()) {
             throw new IllegalArgumentException(
                     "Only the owner of the shop '" + shop.getName() + "' is allowed to add menus."
             );
@@ -74,7 +68,7 @@ public class MenuService {
          * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
          **/
         Menu menu = menuRepository.findById(menuId).orElseThrow();
-        if (menu.getShop().getUser().getId() != authUser.getId()) {
+        if (menu.getShop().getUser().getId() != getAuthUser().getId()) {
             throw new IllegalArgumentException(
                     "Only the owner of the shop '" + menu.getShop().getName() + "' is allowed to update menu."
             );
@@ -85,5 +79,13 @@ public class MenuService {
 
     public void delete(int menuId) {
         menuRepository.deleteById(menuId);
+    }
+
+    private User getAuthUser() {
+        //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
+        return userRepository.findById(AuthUtil.getId())
+                .orElseThrow(() ->
+                        new NullPointerException("User not found with ID: " + AuthUtil.getId())
+                );
     }
 }

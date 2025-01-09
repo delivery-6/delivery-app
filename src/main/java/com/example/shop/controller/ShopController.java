@@ -18,7 +18,7 @@ public class ShopController {
     private ShopService shopService;
 
     // 가게 단건 조회
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ShopReadResponseDto> find(@PathVariable int id) {
         // 주어진 ID로 가게 조회 후 반환
         return ResponseEntity.ok(shopService.find(id));
@@ -38,7 +38,7 @@ public class ShopController {
     }
 
     // 가게 정보 업데이트
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ShopReadResponseDto> partialUpdate(
             @PathVariable int id,
             @RequestBody ShopUpdateRequestDto dto
@@ -47,7 +47,7 @@ public class ShopController {
     }
 
     // 가게 삭제 (논리적 삭제)
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         shopService.delete(id);
         return ResponseEntity.noContent().build();

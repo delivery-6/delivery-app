@@ -79,10 +79,13 @@ public class ShopService {
     public void delete(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("ID '" + id + "'에 해당하는 가게를 찾을 수 없습니다.");
         }
 
+        String shopName = shop.getName();  // 가게 이름 가져오기
         shop.markAsDeleted();
         shopRepository.save(shop);
+
+        System.out.println("가게 '" + shopName + "' (ID: " + id + ")이 성공적으로 삭제 처리되었습니다.");
     }
 }

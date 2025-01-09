@@ -23,6 +23,7 @@ public class MenuService {
     @Autowired
     private UserRepository userRepository;
 
+    //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
     private final User authUser = userRepository.findById(AuthUtil.getId())
             .orElseThrow(() ->
                     new NullPointerException("User not found with ID: " + AuthUtil.getId())
@@ -66,15 +67,17 @@ public class MenuService {
             int menuId,
             MenuUpdateRequestDto dto
     ) {
+        /**
+         * TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
+         * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
+         **/
         Menu menu = menuRepository.findById(menuId).orElseThrow();
         if (menu.getShop().getUser().getId() != authUser.getId()) {
             throw new IllegalArgumentException(
                     "Only the owner of the shop '" + menu.getShop().getName() + "' is allowed to update menu."
             );
         }
-
         menu = menuRepository.save(menu.partialUpdate(dto));
-
         return MenuResponseDetailDto.from(menu);
     }
 

@@ -22,56 +22,68 @@ configurations {
 repositories {
     mavenCentral()
 }
+
 dependencies {
-    // 웹 애플리케이션 개발을 위한 Spring Boot 웹 스타터
+    // QueryDSL: 동적 SQL 생성을 위한 라이브러리 및 코드 생성 설정
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+
+    // Spring Boot 웹 애플리케이션 개발
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // Lombok: 코드 작성 편의를 위한 라이브러리 (Getter/Setter 자동 생성 등)
-    compileOnly 'org.projectlombok:lombok' // 컴파일 시에만 사용
-    annotationProcessor 'org.projectlombok:lombok' // 어노테이션 처리기
+    // Lombok: 코드 자동 생성을 위한 라이브러리
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-    // 테스트 라이브러리: JUnit을 포함한 Spring Boot 테스트 유틸리티
+    // Spring Boot 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // MySQL 커넥터: MySQL 데이터베이스와의 통신을 위한 JDBC 드라이버
+    // MySQL 데이터베이스 연결
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 
-    // JUnit Platform Launcher: 테스트 실행을 위한 런처
+    // JUnit 테스트 실행기
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // Hibernate Validator: Java Bean Validation (유효성 검사) 구현체
+    // Hibernate Validator: Java Bean Validation 구현체
     implementation 'org.hibernate.validator:hibernate-validator'
 
-    // Spring Boot JPA: 데이터베이스 액세스를 위한 JPA 지원 (Hibernate 포함)
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    // Spring Boot JPA (Hibernate 포함)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // QueryDSL: 타입 세이프 SQL 쿼리를 지원하는 JPA 확장 라이브러리
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-
-    // Jakarta Persistence API: JPA 표준 명세
+    // Jakarta Persistence API
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-
-    // QueryDSL APT 프로세서: QueryDSL의 코드 생성을 위한 어노테이션 처리기
-    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
-
-    // Jakarta Persistence API 어노테이션 처리기 (QueryDSL과 함께 사용)
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 
-    // Spring Security: 애플리케이션 보안을 위한 라이브러리
+    // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // JWT: JSON Web Token 생성 및 검증
+    // JWT: JSON Web Token 인증 및 검증
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON 파싱 지원
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    // Spring Boot DevTools: 개발 중 핫 리로딩 지원
+    // Spring Boot 개발 중 핫 리로딩 지원
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // Spring Dotenv: .env 파일 지원 라이브러리 추가
+    // .env 파일 지원
     implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// QueryDSL Q 클래스 생성 위치 설정
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main {
+        java {
+            srcDirs += querydslDir
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
 }

@@ -59,7 +59,9 @@ public class MenuService {
             );
         }
 
-        Menu menu = menuRepository.save(Menu.from(shop, dto));
+        Menu menu = menuRepository.save(
+                Menu.from(shop, dto.name(), dto.price())
+        );
         return MenuResponseDetailDto.from(menu);
     }
 

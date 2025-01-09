@@ -57,7 +57,7 @@ public class ShopService {
         }
 
         // 가게 생성
-        Shop shop = new Shop(user, dto.name(), dto.openingHours(), dto.closingHours(), dto.minOrderAmount());
+        Shop shop = new Shop(user, dto.name(), dto.openedAt(), dto.closedAt(), dto.minOrderPrice());
         shop = shopRepository.save(shop);
 
         return ShopReadResponseDto.from(shop);
@@ -70,7 +70,7 @@ public class ShopService {
             throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
         }
 
-        shop.updateDetails(dto.name(), dto.openingHours(), dto.closingHours(), dto.minOrderAmount());
+        shop.updateDetails(dto.name(), dto.openedAt(), dto.closedAt(), dto.minOrderPrice());
         shop = shopRepository.save(shop);
         return ShopReadResponseDto.from(shop);
     }

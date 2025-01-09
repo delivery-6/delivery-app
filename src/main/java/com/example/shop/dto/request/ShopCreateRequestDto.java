@@ -11,13 +11,13 @@ public record ShopCreateRequestDto(
 
         // 오픈 시간
         @NotBlank(message = "오픈 시간 설정은 필수입니다.")
-        String openingHours,
+        String openedAt,
 
         // 마감 시간
         @NotBlank(message = "마감 시간 설정은 필수입니다.")
-        String closingHours,
+        String closedAt,
 
         // 최소 주문 금액
         @NotBlank(message = "최소 주문 금액은 필수입니다.")
-        double minOrderAmount
+        double minOrderPrice
 ) {}

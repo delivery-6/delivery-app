@@ -26,31 +26,31 @@ public class Shop {
 
     // 오픈 시간
     @Column(nullable = false)
-    private String openingHours;
+    private String openedAt;
 
     // 마감 시간
     @Column(nullable = false)
-    private String closingHours;
+    private String closedAt;
 
     // 최소 주문 금액
     @Column(nullable = false)
-    private double minOrderAmount;
+    private double minOrderPrice;
 
     // 생성자
-    public Shop(User user, String name, String openingHours, String closingHours, double minOrderAmount) {
+    public Shop(User user, String name, String openedAt, String closedAt, double minOrderPrice) {
         this.user = user;
         this.name = name;
-        this.openingHours = openingHours;
-        this.closingHours = closingHours;
-        this.minOrderAmount = minOrderAmount;
+        this.openedAt = openedAt;
+        this.closedAt = closedAt;
+        this.minOrderPrice = minOrderPrice;
     }
 
     // 가게 정보 업데이트
-    public void updateDetails(String name, String openingHours, String closingHours, double minOrderAmount) {
+    public void updateDetails(String name, String openedAt, String closedAt, double minOrderPrice) {
         if (name != null) this.name = name;
-        if (openingHours != null) this.openingHours = openingHours;
-        if (closingHours != null) this.closingHours = closingHours;
-        if (minOrderAmount >= 0) this.minOrderAmount = minOrderAmount;
+        if (openedAt != null) this.openedAt = openedAt;
+        if (closedAt != null) this.closedAt = closedAt;
+        if (minOrderPrice >= 0) this.minOrderPrice = minOrderPrice;
     }
 
     // 가게를 삭제된 상태로 마킹 (논리적 삭제)

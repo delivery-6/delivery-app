@@ -1,39 +1,60 @@
 package com.example.shop.entity;
 
 import com.example.user.entity.User;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 @Getter
-@Table(name = "shops")
+@NoArgsConstructor
 @Entity
+@Table(name = "shops")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Setter
     @Column(nullable = false, length = 10)
     private String name;
 
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @Setter
     @Column(nullable = false)
     private Boolean isDeleted = false;
+
+    // 오픈 시간
+    @Column(nullable = false)
+    private String openingHours;
+
+    // 마감 시간
+    @Column(nullable = false)
+    private String closingHours;
+
+    // 최소 주문 금액
+    @Column(nullable = false)
+    private double minOrderAmount;
+
+    // 생성자
+    public Shop(User user, String name, String openingHours, String closingHours, double minOrderAmount) {
+        this.user = user;
+        this.name = name;
+        this.openingHours = openingHours;
+        this.closingHours = closingHours;
+        this.minOrderAmount = minOrderAmount;
+    }
+
+    // 가게 정보 업데이트
+    public void updateDetails(String name, String openingHours, String closingHours, double minOrderAmount) {
+        if (name != null) this.name = name;
+        if (openingHours != null) this.openingHours = openingHours;
+        if (closingHours != null) this.closingHours = closingHours;
+        if (minOrderAmount >= 0) this.minOrderAmount = minOrderAmount;
+    }
+
+    // 가게를 삭제된 상태로 마킹 (논리적 삭제)
+    public void markAsDeleted() {
+        this.isDeleted = true;
+    }
 }

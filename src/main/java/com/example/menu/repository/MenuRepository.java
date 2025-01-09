@@ -1,6 +1,9 @@
 package com.example.menu.repository;
 
 import com.example.menu.entity.Menu;
+import com.example.utils.QuerydslUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.querydsl.jpa.JPQLQueryFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,7 +18,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer>, MenuQueryR
 }
 
 interface MenuQueryRepository {
-    List<Menu> findAllByShopId(int id);
+    Page<Menu> findAllByShopId(Pageable pageable, int id);
 }
 
 @Repository
@@ -27,11 +30,11 @@ class MenuRepositoryImpl implements MenuQueryRepository {
     }
 
     @Override
-    public List<Menu> findAllByShopId(int id) {
-        return queryFactory
+    public Page<Menu> findAllByShopId(Pageable pageable, int id) {
+        var result = queryFactory
                 .selectFrom(menu)
                 .join(menu.shop, shop).fetchJoin()
-                .where(menu.shop.id.eq(id))
-                .fetch();
+                .where(menu.shop.id.eq(id));
+        return QuerydslUtil.fetchPage(result, menu, pageable);
     }
 }

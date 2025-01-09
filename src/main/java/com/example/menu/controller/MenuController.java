@@ -5,6 +5,8 @@ import com.example.menu.dto.request.MenuUpdateRequestDto;
 import com.example.menu.dto.response.MenuResponseDetailDto;
 import com.example.menu.dto.response.MenuResponseSimpleDto;
 import com.example.menu.service.MenuService;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,8 @@ public class MenuController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(int shopId){
-        return ResponseEntity.ok(menuService.findAll(shopId));
+    public ResponseEntity<Page<MenuResponseSimpleDto>> findAll(PageQuery pageQuery, int shopId){
+        return ResponseEntity.ok(menuService.findAll(pageQuery, shopId));
     }
 
     @PostMapping

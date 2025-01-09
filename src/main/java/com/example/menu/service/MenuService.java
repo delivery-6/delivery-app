@@ -10,10 +10,10 @@ import com.example.shop.entity.Shop;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -36,11 +36,11 @@ public class MenuService {
         return MenuResponseDetailDto.from(menu);
     }
 
-    public List<MenuResponseSimpleDto> findAll(int shopId) {
-        List<Menu> menus = menuRepository.findAllByShopId(shopId);
-        return menus.stream()
-                .map(MenuResponseSimpleDto::from)
-                .toList();
+    public Page<MenuResponseSimpleDto> findAll(PageQuery page, int shopId) {
+        return Page.from(
+                menuRepository.findAllByShopId(page.toPageable(), shopId)
+                        .map(MenuResponseSimpleDto::from)
+        );
     }
 
     public MenuResponseDetailDto create(

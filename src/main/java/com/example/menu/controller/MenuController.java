@@ -23,13 +23,13 @@ public class MenuController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(int shopId){
+    public ResponseEntity<List<MenuResponseSimpleDto>> findAll(@PathVariable int shopId){
         return ResponseEntity.ok(menuService.findAll(shopId));
     }
 
     @PostMapping
     public ResponseEntity<MenuResponseDetailDto> create(
-            int shopId,
+            @PathVariable int shopId,
             @RequestBody MenuCreateRequestDto dto
     ){
         return ResponseEntity.ok(menuService.create(shopId, dto));

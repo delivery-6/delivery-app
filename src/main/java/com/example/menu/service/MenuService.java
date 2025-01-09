@@ -8,15 +8,25 @@ import com.example.menu.entity.Menu;
 import com.example.menu.repository.MenuRepository;
 import com.example.shop.entity.Shop;
 import com.example.user.entity.User;
+import com.example.user.repository.UserRepository;
+import com.example.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class MenuService {
     @Autowired
     private MenuRepository menuRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    private final User authUser = userRepository.findById(AuthUtil.getId())
+            .orElseThrow(() ->
+                    new NullPointerException("User not found with ID: " + AuthUtil.getId())
+            );
 
     public MenuResponseDetailDto find(int id) {
         //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
@@ -40,12 +50,13 @@ public class MenuService {
          * TODO: ShopRepository 가 완성 후, 수정해야합니다.
          * TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
          * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
-         * User user = getAuthenticatedUser();
-         *         if(!shop.getUser().getId().equals(user.getId())){
-         *             throw new Exception();
-         *         }
          **/
         Shop shop = new Shop();
+        if (shop.getUser().getId() != authUser.getId()) {
+            throw new IllegalArgumentException(
+                    "Only the owner of the shop '" + shop.getName() + "' is allowed to add menus."
+            );
+        }
 
         Menu menu = menuRepository.save(Menu.from(shop, dto));
         return MenuResponseDetailDto.from(menu);
@@ -55,24 +66,19 @@ public class MenuService {
             int menuId,
             MenuUpdateRequestDto dto
     ) {
-        /**
-         * TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
-         * if(!menu.getShop().getUser().getId().equals(getAuthenticatedUser().getId()))
-         *      throw new Exception("");
-         */
         Menu menu = menuRepository.findById(menuId).orElseThrow();
+        if (menu.getShop().getUser().getId() != authUser.getId()) {
+            throw new IllegalArgumentException(
+                    "Only the owner of the shop '" + menu.getShop().getName() + "' is allowed to update menu."
+            );
+        }
+
         menu = menuRepository.save(menu.partialUpdate(dto));
 
         return MenuResponseDetailDto.from(menu);
     }
 
-    public void delete(int menuId){
+    public void delete(int menuId) {
         menuRepository.deleteById(menuId);
-
-    }
-
-    //TODO: 인증 구현 후, 세션을 이용해 유저를 가져오는 작업을 추가해야 합니다.
-    private User getAuthenticatedUser() {
-        return null;
     }
 }

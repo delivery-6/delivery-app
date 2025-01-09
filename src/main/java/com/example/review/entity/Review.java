@@ -1,9 +1,7 @@
 package com.example.review.entity;
-import com.example.user.entity.User;
-import com.example.shop.entity.Shop;
+import com.example.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,20 +16,14 @@ public class Review {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private Shop shop;
-
-    @Setter
     @Column(nullable = false)
     private Integer rating;
 
-    @Setter
     @Column(length = 50)
-    private String description;
+    private String content;
 
     @Column(updatable = false)
     @CreatedDate

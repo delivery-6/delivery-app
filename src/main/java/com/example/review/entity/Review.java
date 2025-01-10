@@ -28,15 +28,10 @@ public class Review {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private Shop shop;
-
-    @Setter
     @Column(nullable = false)
     private Integer rating;
 
-    @Setter
+
     @Column(length = 50)
     private String description;
 
@@ -61,12 +56,12 @@ public class Review {
     }
 
 
-    public static Review from(Shop shop,Order order, ReviewCreateRequestDto dto) {
+    public static Review from(Shop shop,Order order, Integer rating, String description) {
         return new Review(
                 order,
                 shop,
-                dto.rating(),
-                dto.description()
+                rating,
+                description
         );
     }
 }

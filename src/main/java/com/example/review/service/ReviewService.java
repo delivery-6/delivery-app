@@ -1,16 +1,15 @@
 package com.example.review.service;
 
 import com.example.order.entity.Order;
-import com.example.order.entity.repository.OrderRepository;
+import com.example.order.repository.OrderRepository;
 import com.example.review.dto.request.ReviewCreateRequestDto;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
-import com.example.review.dto.response.ReviewPageResponseDto;
+import com.example.review.dto.response.ReviewResponseSimpleDto;
 import com.example.review.dto.response.ReviewResponseDetailDto;
 import com.example.review.entity.Review;
 import com.example.review.repository.ReviewRepository;
 import com.example.shop.entity.Shop;
 import com.example.shop.repository.ShopRepository;
-import com.example.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +24,6 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private ShopRepository shopRepository;
     @Autowired
     private OrderRepository orderRepository;
@@ -40,7 +37,7 @@ public class ReviewService {
         if (reviewRepository.existsByOrder(order)) {
             throw new IllegalArgumentException("리뷰가 이미 작성되어있습니다.");
         }
-        Review review = reviewRepository.save(Review.from(shop, order, requestDto));
+        Review review = reviewRepository.save(Review.from(shop, order, requestDto.rating(), requestDto.description()));
         return ReviewResponseDetailDto.from(review);
     }
 
@@ -57,12 +54,12 @@ public class ReviewService {
         return ReviewResponseDetailDto.from(review);
     }
 
-    public List<ReviewPageResponseDto> findReviewsByShopId(int shopId, Pageable pageable) {
+    public Page<ReviewResponseSimpleDto> findReviewsByShopId(int shopId, Pageable pageable) {
         // Repository에서 Page<Review>를 가져옴
         Page<Review> reviews = reviewRepository.findByShopId(shopId, pageable);
 
         // Page<Review>를 Page<ReviewPageResponseDto>로 변환
-        return ReviewPageResponseDto.from(reviews);
+        return ReviewResponseSimpleDto.from(reviews);
     }
 
     public void delete(int reviewId){

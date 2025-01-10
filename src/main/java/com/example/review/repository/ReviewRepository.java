@@ -21,24 +21,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     Page<Review> findByShopId(int shopId, Pageable pageable);
 }
 
-interface ReviewQueryRepository {
-    List<Menu> findAllByShopId(int id);
-}
 
-@Repository
-class ReviewRepositoryImpl implements ReviewQueryRepository {
-    private final JPQLQueryFactory queryFactory;
 
-    public ReviewRepositoryImpl(JPQLQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
-    }
-
-    @Override
-    public List<Menu> findAllByShopId(int id) {
-        return queryFactory
-                .selectFrom(menu)
-                .join(menu.shop, shop).fetchJoin()
-                .where(menu.shop.id.eq(id))
-                .fetch();
-    }
-}

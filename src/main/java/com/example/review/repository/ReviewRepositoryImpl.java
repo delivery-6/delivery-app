@@ -1,13 +1,16 @@
 package com.example.review.repository;
 
-import com.example.menu.entity.Menu;
+import com.example.review.entity.Review;
+import com.example.utils.QuerydslUtil;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-import static com.example.menu.entity.QMenu.menu;
-import static com.example.shop.entity.QShop.shop;
+import static com.example.user.entity.QUser.user;
+import static com.example.order.entity.QOrder.order;
+import static com.example.review.entity.QReview.review;
 
 @Repository
 class ReviewRepositoryImpl implements ReviewQueryRepository {
@@ -18,11 +21,14 @@ class ReviewRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public List<Menu> findAllByShopId(int id) {
-        return queryFactory
-                .selectFrom(menu)
-                .join(menu.shop, shop).fetchJoin()
-                .where(menu.shop.id.eq(id))
-                .fetch();
+    public Page<Review> findAllByUserId(Pageable pageable, int id) {
+        JPQLQuery<Review> query = queryFactory
+                .selectFrom(review)
+                .join(review.order, order).fetchJoin()
+                .join(order.user, user).fetchJoin()
+                .where(user.id.eq(id));
+        return QuerydslUtil.fetchPage(pageable, review, query);
     }
+
+
 }

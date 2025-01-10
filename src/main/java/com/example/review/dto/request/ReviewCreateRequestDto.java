@@ -2,7 +2,8 @@ package com.example.review.dto.request;
 
 
 public record ReviewCreateRequestDto(
-        Integer rating,
+        int orderId,
+        int rating,
         String description
 ) {
 }

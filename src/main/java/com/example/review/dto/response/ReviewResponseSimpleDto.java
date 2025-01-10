@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReviewResponseSimpleDto {
     private String userName;
+    private int orderId;
     private Integer rating;
     private String description;
-    private LocalDateTime updateAt;
 
     public static Page<ReviewResponseSimpleDto> from(Page<Review> reviewPage) {
         List<ReviewResponseSimpleDto> content = reviewPage.getContent().stream()
@@ -25,11 +25,21 @@ public class ReviewResponseSimpleDto {
                         review.getOrder().getUser().getName(),
                         review.getRating(),
                         review.getDescription(),
-                        review.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(content, reviewPage.getPageable(), reviewPage.getTotalElements());
     }
 
+    public static ReviewResponseSimpleDto from(
+            String username,
+            Review review
+    ) {
+        return new ReviewResponseSimpleDto(
+                username,
+                review.getOrder().getId(),
+                review.getRating(),
+                review.getDescription()
+        );
+    }
 }

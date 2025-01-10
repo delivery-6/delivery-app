@@ -1,9 +1,12 @@
 package com.example.review.repository;
 
-import com.example.menu.entity.Menu;
+import com.example.review.entity.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 interface ReviewQueryRepository {
-    List<Menu> findAllByShopId(int id);
+    List<Review> findAllByShopId(int id);
+    Page<Review> findAllByUserId(Pageable pageable, int id);
 }

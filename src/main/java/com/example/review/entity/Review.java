@@ -1,25 +1,18 @@
 package com.example.review.entity;
 
+import com.example.common.entity.BaseEntity;
 import com.example.order.entity.Order;
-import com.example.review.dto.request.ReviewCreateRequestDto;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
-import com.example.shop.entity.Shop;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Getter
-@Table(name = "reviews")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,22 +22,13 @@ public class Review {
     private Order order;
 
     @Column(nullable = false)
-    private Integer rating;
+    private int rating;
 
-
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String description;
 
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    public Review(Order order, Shop shop, Integer rating, String description) {
+    public Review(Order order, Integer rating, String description) {
         this.order = order;
-        this.shop = shop;
         this.rating = rating;
         this.description = description;
     }
@@ -55,11 +39,13 @@ public class Review {
         return this;
     }
 
-
-    public static Review from(Shop shop,Order order, Integer rating, String description) {
+    public static Review from(
+            Order order,
+            int rating,
+            String description
+    ) {
         return new Review(
                 order,
-                shop,
                 rating,
                 description
         );

@@ -4,13 +4,13 @@ import com.example.shop.dto.request.ShopCreateRequestDto;
 import com.example.shop.dto.request.ShopUpdateRequestDto;
 import com.example.shop.dto.response.ShopReadResponseDto;
 import com.example.shop.service.ShopService;
+import com.example.utils.PageQuery;
 import jakarta.validation.Valid;
+import com.example.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/shop")
@@ -28,9 +28,9 @@ public class ShopController {
 
     // 모든 가게 조회 (이름으로 필터링 가능)
     @GetMapping
-    public ResponseEntity<List<ShopReadResponseDto>> findAll(@RequestParam(required = false) String name) {
+    public ResponseEntity<Page<ShopReadResponseDto>> findAll(@RequestParam(required = false) String name, PageQuery pageQuery) {
         // 이름에 해당하는 가게들만 조회 (이름이 null 이면 모든 가게 조회)
-        return ResponseEntity.ok(shopService.findAll(name));
+        return ResponseEntity.ok(shopService.findAll(pageQuery, name));
     }
 
     // 가게 생성

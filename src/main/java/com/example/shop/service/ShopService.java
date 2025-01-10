@@ -9,9 +9,10 @@ import com.example.user.entity.Role;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import com.example.utils.Page;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,11 +34,11 @@ public class ShopService {
     }
 
     // 모든 가게 조회 (삭제되지 않은 데이터만)
-    public List<ShopReadResponseDto> findAll(String name) {
-        List<Shop> shops = shopRepository.findByNameContainingAndIsDeletedFalse(name);
-        return shops.stream()
-                .map(ShopReadResponseDto::from)
-                .collect(Collectors.toList());
+    public Page<ShopReadResponseDto> findAll(PageQuery page, String name) {
+        return Page.from(
+            shopRepository.findByNameContainingAndIsDeletedFalse(page.toPageable(), name)
+                    .map(ShopReadResponseDto::from)
+        );
     }
 
     // 가게 생성

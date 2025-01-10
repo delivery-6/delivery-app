@@ -1,9 +1,9 @@
 package com.example.menu.repository;
 
 import com.example.menu.entity.Menu;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 interface MenuQueryRepository {
-    List<Menu> findAllByShopId(int id);
+    Page<Menu> findAllByShopId(Pageable pageable, int id);
 }

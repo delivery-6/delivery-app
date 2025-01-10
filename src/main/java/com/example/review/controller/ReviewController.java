@@ -47,9 +47,10 @@ public class ReviewController {
     // 특정 상점의 리뷰 페이지 조회
     @GetMapping("/shops/{shopId}")
     public ResponseEntity<Page<ReviewResponseSimpleDto>> findAllReviewByShopId(
-            @RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "updateAt"));
-        return reviewService.findReviewsByShopId(pageable);
+            @PathVariable int shopId, @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        Page<ReviewResponseSimpleDto> reviews = reviewService.findReviewsByShopId(shopId, pageable);
+        return ResponseEntity.ok(reviews);
     }
 
     // 특정 유저의 모든 리뷰 조회

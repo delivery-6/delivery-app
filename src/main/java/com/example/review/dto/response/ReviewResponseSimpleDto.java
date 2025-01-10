@@ -19,12 +19,13 @@ public class ReviewResponseSimpleDto {
     private Integer rating;
     private String description;
 
-    public static Page<ReviewResponseSimpleDto> from(Page<Review> reviewPage) {
+    public static Page<ReviewResponseSimpleDto> pageFrom(Page<Review> reviewPage) {
         List<ReviewResponseSimpleDto> content = reviewPage.getContent().stream()
                 .map(review -> new ReviewResponseSimpleDto(
                         review.getOrder().getUser().getName(),
+                        review.getOrder().getId(),
                         review.getRating(),
-                        review.getDescription(),
+                        review.getDescription()
                 ))
                 .collect(Collectors.toList());
 

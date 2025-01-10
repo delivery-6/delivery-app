@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 public record ReviewResponseDetailDto(
         int id,
-        int shopId,
         int userId,
         String userName,
         int rating,
@@ -18,7 +17,6 @@ public record ReviewResponseDetailDto(
     public static ReviewResponseDetailDto from(Review review) {
         return new ReviewResponseDetailDto(
                 review.getId(),
-                review.getShop().getId(),
                 review.getOrder().getUser().getId(),
                 review.getOrder().getUser().getName(),
                 review.getRating(),

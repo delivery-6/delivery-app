@@ -9,6 +9,8 @@ import com.example.user.entity.Role;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,7 @@ public class ShopService {
     @Autowired
     private UserRepository userRepository;
 
-    // 가게 조회 (삭제되지 않은 데이터만)
+    // 특정 가게 조회 (삭제되지 않은 데이터만)
     public ShopReadResponseDto find(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
@@ -33,12 +35,15 @@ public class ShopService {
         return ShopReadResponseDto.from(shop);
     }
 
-    // 모든 가게 조회 (삭제되지 않은 데이터만)
-    public List<ShopReadResponseDto> findAll(String name) {
-        List<Shop> shops = shopRepository.findByNameContainingAndIsDeletedFalse(name);
-        return shops.stream()
-                .map(ShopReadResponseDto::from)
-                .collect(Collectors.toList());
+    // 삭제되지 않은 가게 목록 조회 (페이징 처리)
+    public Page<ShopReadResponseDto> findAll(PageQuery pageQuery) {
+        var pageable = pageQuery.toPageable();  // PageQuery를 Pageable로 변환
+        var shopPage = shopRepository.findActiveShops(pageable);  // Repository에서 페이징 처리된 데이터 가져오기
+
+        // Shop 엔티티를 ShopReadResponseDto로 변환
+        var shopDtoPage = shopPage.map(ShopReadResponseDto::from);
+
+        return Page.from(shopDtoPage);  // 결과를 Page로 변환하여 반환
     }
 
     // 가게 생성

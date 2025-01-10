@@ -4,11 +4,17 @@ import com.example.shop.dto.request.ShopCreateRequestDto;
 import com.example.shop.dto.request.ShopUpdateRequestDto;
 import com.example.shop.dto.response.ShopReadResponseDto;
 import com.example.shop.service.ShopService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/shop")
@@ -17,18 +23,16 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
-    // 가게 단건 조회
-    @GetMapping("/{id}")
+    // 단건 가게 조회
+    @GetMapping("/shops/{id}")
     public ResponseEntity<ShopReadResponseDto> find(@PathVariable int id) {
-        // 주어진 ID로 가게 조회 후 반환
         return ResponseEntity.ok(shopService.find(id));
     }
 
-    // 모든 가게 조회 (이름으로 필터링 가능)
-    @GetMapping
-    public ResponseEntity<List<ShopReadResponseDto>> findAll(@RequestParam(required = false) String name) {
-        // 이름에 해당하는 가게들만 조회 (이름이 null 이면 모든 가게 조회)
-        return ResponseEntity.ok(shopService.findAll(name));
+    // 모든 가게 조회 (페이징 처리)
+    @GetMapping("/shops")
+    public ResponseEntity<Page<ShopReadResponseDto>> findAll(PageQuery pageQuery) {
+        return ResponseEntity.ok(shopService.findAll(pageQuery));
     }
 
     // 가게 생성
@@ -41,7 +45,7 @@ public class ShopController {
     @PatchMapping("/{id}")
     public ResponseEntity<ShopReadResponseDto> partialUpdate(
             @PathVariable int id,
-            @RequestBody ShopUpdateRequestDto dto
+            @Valid @RequestBody ShopUpdateRequestDto dto
     ) {
         return ResponseEntity.ok(shopService.partialUpdate(id, dto));
     }

@@ -5,6 +5,7 @@ import com.example.shop.dto.request.ShopUpdateRequestDto;
 import com.example.shop.dto.response.ShopReadResponseDto;
 import com.example.shop.entity.Shop;
 import com.example.shop.repository.ShopRepository;
+import com.example.user.entity.Role;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
@@ -27,7 +28,7 @@ public class ShopService {
     public ShopReadResponseDto find(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("'" + id + "' 가게를 찾을 수 없습니다.");
         }
         return ShopReadResponseDto.from(shop);
     }
@@ -46,8 +47,8 @@ public class ShopService {
         User user = userRepository.findById(AuthUtil.getId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다." + AuthUtil.getId()));
 
-        // is_owner 여부 확인 및 가게 개수 제한
-        if (!user.getIsOwner()) {
+        // User 의 role 을 확인하여 OWNER 권한이 있는지 체크
+        if (user.getRole() != Role.OWNER) {
             throw new IllegalArgumentException("가게를 생성할 권한이 없습니다.");
         }
 
@@ -67,7 +68,7 @@ public class ShopService {
     public ShopReadResponseDto partialUpdate(int id, ShopUpdateRequestDto dto) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("'" +id + "' 가게를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("'" + id + "' 가게를 찾을 수 없습니다.");
         }
 
         shop.updateDetails(dto.name(), dto.openedAt(), dto.closedAt(), dto.minOrderPrice());

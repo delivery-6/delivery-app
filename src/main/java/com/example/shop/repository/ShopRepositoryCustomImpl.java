@@ -20,8 +20,6 @@ public class ShopRepositoryCustomImpl implements ShopRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    private QShop shop = QShop.shop;
-
     @Override
     public List<Shop> findAllActive() {
         return queryFactory.selectFrom(shop)

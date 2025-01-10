@@ -6,6 +6,3 @@ services:
       MYSQL_DATABASE: sparta-delivery-app
     ports:
       - "3306:3306"
-
-
-

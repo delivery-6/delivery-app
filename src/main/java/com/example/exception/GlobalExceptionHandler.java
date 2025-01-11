@@ -1,40 +1,40 @@
 package com.example.exception;
 
+import com.example.exception.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
-@RestControllerAdvice
+import java.util.stream.Collectors;
+
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 입력이에요: " + ex.getMessage());
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Object> handleCustomException(CustomException ex) {
+        String message = ex.getCustomMessage() != null ? ex.getCustomMessage() : ex.getErrorCode().getDefaultMessage();
+        HttpStatus status = ex.getErrorCode().getStatus();
+
+        ErrorResponseDto errorResponse = ErrorResponseDto.of(status, message);
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining("; "));
+
+        ErrorResponseDto errorResponse = ErrorResponseDto.of(HttpStatus.BAD_REQUEST, message);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에 문제가 생겼습니다. 잠시 후 다시 시도해주세요.");
+    public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request) {
+        ErrorResponseDto errorResponse = ErrorResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, "예기치 않은 오류가 발생했습니다.");
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
-        String errorMessage = ex.getBindingResult()
-                .getAllErrors()
-                .get(0)
-                .getDefaultMessage(); // 첫 번째 에러 메시지 반환
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입력값 검증 실패: " + errorMessage);
-    }
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("지원하지 않는 요청 메서드입니다: " + ex.getMethod());
-    }
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("요청 본문이 잘못되었습니다. 데이터를 확인해주세요.");
-    }
-
 }

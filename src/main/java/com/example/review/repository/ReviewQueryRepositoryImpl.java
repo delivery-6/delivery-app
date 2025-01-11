@@ -10,12 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.example.shop.entity.QShop.shop;
 import static com.example.user.entity.QUser.user;
 import static com.example.order.entity.QOrder.order;
 import static com.example.review.entity.QReview.review;
 
 @Repository
 class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
+
     private final JPQLQueryFactory queryFactory;
 
     public ReviewQueryRepositoryImpl(JPQLQueryFactory queryFactory) {
@@ -23,17 +25,34 @@ class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public Page<Review> findAllByShopId(int id) {
-      return null;
+    public Page<Review> findAllByShopId(int shopId, Pageable pageable) {
+        // QueryDSL Query 생성
+        JPQLQuery<Review> query = queryFactory
+                .selectFrom(review)
+                .join(review.order, order).fetchJoin() // Review → Order
+                .join(order.user, user).fetchJoin()    // Order → User
+                .join(shop).on(user.id.eq(shop.user.id)) // User → Shop
+                .where(shop.id.eq(shopId));           // Shop ID 조건 추가
+
+        // 전체 개수 조회
+        long total = query.fetchCount();
+
+        // 페이징 처리
+        List<Review> content = query
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
-    public Page<Review> findAllByUserId(Pageable pageable, int id) {
+    public Page<Review> findAllByUserId(Pageable pageable, int userId) {
         JPQLQuery<Review> query = queryFactory
                 .selectFrom(review)
                 .join(review.order, order).fetchJoin()
                 .join(order.user, user).fetchJoin()
-                .where(user.id.eq(id));
+                .where(user.id.eq(userId));
 
         long total = query.fetchCount(); // 전체 개수
         List<Review> content = query
@@ -43,5 +62,4 @@ class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
-
 }

@@ -6,7 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-interface ReviewQueryRepository {
-    Page<Review> findAllByShopId(int id);
-    Page<Review> findAllByUserId(Pageable pageable, int id);
+public interface ReviewQueryRepository {
+    Page<Review> findAllByShopId(int shopId, Pageable pageable);
+
+    Page<Review> findAllByUserId(Pageable pageable, int userId);
 }

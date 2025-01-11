@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReviewRepository extends JpaRepository<Review, Integer>, ReviewQueryRepository {
 
     boolean existsByOrder(Order order);
-    Page<Review> findByShopId(int shopId, Pageable pageable);
+
 }

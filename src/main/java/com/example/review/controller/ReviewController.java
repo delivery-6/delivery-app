@@ -49,7 +49,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewResponseSimpleDto>> findAllReviewByShopId(
             @PathVariable int shopId, @RequestParam int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "updatedAt"));
-        Page<ReviewResponseSimpleDto> reviews = reviewService.findReviewsByShopId(shopId, pageable);
+        Page<ReviewResponseSimpleDto> reviews = reviewService.getReviewsByShopId(shopId, pageable);
         return ResponseEntity.ok(reviews);
     }
 

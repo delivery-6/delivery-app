@@ -68,12 +68,8 @@ public class ReviewService {
         return ReviewResponseDetailDto.from(review);
     }
 
-    public Page<ReviewResponseSimpleDto> findReviewsByShopId(int shopId, Pageable pageable) {
-        // Repository에서 Page<Review>를 가져옴
-        Page<Review> reviews = reviewRepository.findByShopId(shopId, pageable);
-
-        // Page<Review>를 Page<ReviewPageResponseDto>로 변환
-        return ReviewResponseSimpleDto.pageFrom(reviews);
+    public Page<ReviewResponseSimpleDto> getReviewsByShopId(int shopId, Pageable pageable) {
+        return  ReviewResponseSimpleDto.pageFrom(reviewRepository.findAllByShopId(shopId, pageable));
     }
 
     public com.example.utils.Page<ReviewResponseSimpleDto> findAllByUserId(PageQuery pageQuery){

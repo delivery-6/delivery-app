@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -16,7 +18,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User registerUser(String email, String rawPassword, Role role) {
+    public User registerUser(String email, String rawPassword, String roleValue) {
+        // Role 값 검증 및 변환
+        if (!Role.isValid(roleValue)) {
+            throw CustomException.of(
+                    ErrorCode.BAD_REQUEST,
+                    String.format("Invalid role: '%s'. Allowed values are: %s", roleValue, Arrays.toString(Role.values()))
+            );
+        }
+        Role role = Role.valueOf(roleValue.toUpperCase());
+
         // 이메일 중복 확인
         if (userRepository.existsByEmail(email)) {
             // CustomException 사용: 이메일 중복 에러

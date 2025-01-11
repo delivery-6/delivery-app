@@ -3,6 +3,7 @@ package com.example.exception;
 import com.example.exception.custom.BadRequestException;
 import com.example.exception.custom.PermissionDeniedException;
 import com.example.exception.custom.ResourceAlreadyExistsException;
+import com.example.exception.custom.TargetNotFoundException;
 import org.aspectj.apache.bcel.generic.TargetLostException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TargetLostException.class)
-    public ResponseEntity<String> handleTargetNotFoundException(TargetLostException ex) {
+    public ResponseEntity<String> handleTargetNotFoundException(TargetNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body("대상을 찾을 수 없습니다:" + ex.getMessage());

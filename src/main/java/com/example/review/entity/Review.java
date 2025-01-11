@@ -1,16 +1,18 @@
 package com.example.review.entity;
-import com.example.order.entity.Order;
-import jakarta.persistence.*;
-import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
+import com.example.common.entity.BaseEntity;
+import com.example.order.entity.Order;
+import com.example.review.dto.request.ReviewUpdateRequestDto;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "reviews")
 @Entity
-public class Review {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,15 +22,32 @@ public class Review {
     private Order order;
 
     @Column(nullable = false)
-    private Integer rating;
+    private int rating;
 
-    @Column(length = 50)
-    private String content;
+    @Column(nullable = false, length = 50)
+    private String description;
 
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
+    public Review(Order order, Integer rating, String description) {
+        this.order = order;
+        this.rating = rating;
+        this.description = description;
+    }
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    public Review partialUpdate(ReviewUpdateRequestDto dto){
+        this.rating = dto.rating();
+        this.description = dto.description();
+        return this;
+    }
+
+    public static Review from(
+            Order order,
+            int rating,
+            String description
+    ) {
+        return new Review(
+                order,
+                rating,
+                description
+        );
+    }
 }

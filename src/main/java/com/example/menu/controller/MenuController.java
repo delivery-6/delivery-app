@@ -23,7 +23,7 @@ public class MenuController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MenuResponseSimpleDto>> findAll(PageQuery pageQuery, int shopId){
+    public ResponseEntity<Page<MenuResponseSimpleDto>> findAll(PageQuery pageQuery,@PathVariable int shopId){
         return ResponseEntity.ok(menuService.findAll(pageQuery, shopId));
     }
 

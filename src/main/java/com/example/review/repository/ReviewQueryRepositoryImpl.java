@@ -26,13 +26,13 @@ class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
     @Override
     public Page<Review> findAllByShopId(int shopId, Pageable pageable) {
-        // QueryDSL Query 생성
         JPQLQuery<Review> query = queryFactory
                 .selectFrom(review)
-                .join(review.order, order).fetchJoin() // Review → Order
-                .join(order.user, user).fetchJoin()    // Order → User
-                .join(shop).on(user.id.eq(shop.user.id)) // User → Shop
-                .where(shop.id.eq(shopId));           // Shop ID 조건 추가
+                .join(review.order, order).fetchJoin()       // Review → Order
+                .join(order.user, user).fetchJoin()          // Order → User
+                .join(shop).on(user.id.eq(shop.user.id))     // User → Shop
+                .where(shop.id.eq(shopId))                   // Shop ID 조건
+                .orderBy(review.updatedAt.desc());           // 최신순 정렬
 
         // 전체 개수 조회
         long total = query.fetchCount();
@@ -45,6 +45,8 @@ class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
+
+
 
     @Override
     public Page<Review> findAllByUserId(Pageable pageable, int userId) {

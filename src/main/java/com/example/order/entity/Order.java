@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderMenu> orderMenus = List.of();
+    private List<OrderMenu> orderMenus = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private OrderState state = OrderState.NONE;
@@ -48,7 +49,7 @@ public class Order {
     }
 
     public void updateState(OrderState state) {
-        if (OrderState.isUpdatable(this.state, state))
+        if (!OrderState.isUpdatable(this.state, state))
             throw CustomException.of(ErrorCode.BAD_REQUEST, "OrderState cannot be update from " + this.state + " to " + state);
         this.state = state;
     }

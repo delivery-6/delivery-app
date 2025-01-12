@@ -15,7 +15,9 @@ import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
 import com.example.utils.Page;
 import com.example.utils.PageQuery;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -31,14 +33,15 @@ public class OrderService {
     private UserRepository userRepository;
 
     public OrderResponseDto find(int id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository.findByIdWithMenus(id)
                 .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Order with ID: " + id));
         return OrderResponseDto.from(order);
     }
 
     public Page<OrderResponseDto> findAll(PageQuery pageQuery) {
-        return Page.from(orderRepository.findAllByUserId(pageQuery.toPageable(), getAuthUser().getId())
+       return Page.from(orderRepository.findAllByUserId(pageQuery.toPageable(), getAuthUser().getId())
                 .map(OrderResponseDto::from));
+
     }
 
     public OrderResponseDto create(OrderCreateRequestDto dto) {

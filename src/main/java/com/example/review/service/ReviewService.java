@@ -1,11 +1,13 @@
 package com.example.review.service;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.order.entity.Order;
 import com.example.order.repository.OrderRepository;
 import com.example.review.dto.request.ReviewCreateRequestDto;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
-import com.example.review.dto.response.ReviewResponseDetailDto;
 import com.example.review.dto.response.ReviewResponseSimpleDto;
+import com.example.review.dto.response.ReviewResponseDetailDto;
 import com.example.review.entity.Review;
 import com.example.review.repository.ReviewRepository;
 import com.example.shop.repository.ShopRepository;
@@ -20,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -37,11 +41,11 @@ public class ReviewService {
 //        int orderMenuId = order.getOrderMenus().stream().findAny().get().getId();
 //        Shop shop = orderRepository.findOrderMenu(orderMenuId).getMenu().getShop();
         if (order.getUser().getId() != AuthUtil.getId()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 주문 사용자가 아닙니다.");
+            throw CustomException.of(ErrorCode.BAD_REQUEST, "해당 주문 사용자가 아닙니다.");
         }
 
         if (reviewRepository.existsByOrder(order)) {
-            throw new IllegalArgumentException("리뷰가 이미 작성되어있습니다.");
+            throw CustomException.of(ErrorCode.CONFLICT, "리뷰가 이미 작성되어 있습니다.");
         }
         Review review = Review.from(
                 order,
@@ -59,7 +63,7 @@ public class ReviewService {
 
         //업데이트 하는 리뷰의 해당 사용자 맞는지 검사해야함
         if(review.getOrder().getUser().getId() != AuthUtil.getId()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 리뷰 사용자가 아닙니다.");
+            throw CustomException.of(ErrorCode.BAD_REQUEST, "해당 리뷰 사용자가 아닙니다.");
         }
 
         review = reviewRepository.save(review.partialUpdate(requestDto));
@@ -78,6 +82,10 @@ public class ReviewService {
     }
 
     public void delete(int reviewId){
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        if(review.getOrder().getUser().getId() != AuthUtil.getId()){
+            throw CustomException.of(ErrorCode.BAD_REQUEST, "해당 사용자가 아닙니다.");
+        }
         reviewRepository.deleteById(reviewId);
     }
 

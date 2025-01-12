@@ -4,9 +4,12 @@ import com.example.common.entity.BaseEntity;
 import com.example.order.entity.Order;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
@@ -22,6 +25,8 @@ public class Review extends BaseEntity {
     private Order order;
 
     @Column(nullable = false)
+    @Min(1)
+    @Max(5)
     private int rating;
 
     @Column(nullable = false, length = 50)

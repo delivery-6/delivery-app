@@ -25,6 +25,7 @@ class OrderQueryRepositoryImpl implements OrderQueryRepository {
         JPQLQuery<Order> query = queryFactory
                 .selectFrom(order)
                 .join(order.user, user).fetchJoin()
+                .leftJoin(order.orderMenus, orderMenu).fetchJoin()
                 .where(order.user.id.eq(id));
         return QuerydslUtil.fetchPage(query, order, pageable);
     }
@@ -33,7 +34,7 @@ class OrderQueryRepositoryImpl implements OrderQueryRepository {
     public Page<Order> findAllByShopId(Pageable pageable, int id) {
         JPQLQuery<Order> query = queryFactory
                 .selectFrom(order)
-                .join(order.orderMenus, orderMenu).fetchJoin()
+                .leftJoin(order.orderMenus, orderMenu).fetchJoin()
                 .join(order.user).fetchJoin()
                 .where(orderMenu.menu.shop.id.eq(id));
         return QuerydslUtil.fetchPage(query, order, pageable);

@@ -76,17 +76,6 @@
 
 <br>
 
-## 💻 Program operation screen
-
-<details>
-   <summary>📍 실행 화면 보기</summary>
-
-### 📍 실행 화면
-
-</details>
-
-<br>
-
 ## 📂 Architecture
 
 ```java
@@ -241,4 +230,6 @@
 
 
 ## 🛠️ Trouble shooting
+[☄️ 문규민 트러블 슈팅 바로가기](https://velog.io/@alia/%EB%AC%B8%EC%A0%9C%EB%8A%94-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%95%84%EB%8B%8C-%EC%9D%91%EB%8B%B5-%EC%88%A8%EA%B2%A8%EC%A7%84-403-%EC%98%A4%EB%A5%98%EC%9D%98-%ED%95%A8%EC%A0%95)
+<br>
 [☄️ 최순우 트러블 슈팅 바로가기](https://promicing.com/blog/43/)

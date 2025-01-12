@@ -6,9 +6,9 @@ import com.example.exception.ErrorCode;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

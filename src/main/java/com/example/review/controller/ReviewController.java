@@ -2,10 +2,9 @@ package com.example.review.controller;
 
 import com.example.review.dto.request.ReviewCreateRequestDto;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
-import com.example.review.dto.response.ReviewResponseSimpleDto;
 import com.example.review.dto.response.ReviewResponseDetailDto;
+import com.example.review.dto.response.ReviewResponseSimpleDto;
 import com.example.review.service.ReviewService;
-import com.example.utils.AuthUtil;
 import com.example.utils.PageQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")

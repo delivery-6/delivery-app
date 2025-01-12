@@ -9,11 +9,10 @@ import com.example.user.entity.Role;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
+import com.example.utils.Page;
 import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.utils.Page;
-import java.util.stream.Collectors;
 
 @Service
 public class ShopService {

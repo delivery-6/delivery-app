@@ -1,7 +1,7 @@
 package com.example.shop.dto.response;
 
-import com.example.shop.entity.Shop;
 import com.example.menu.dto.response.MenuResponseDetailDto;
+import com.example.shop.entity.Shop;
 
 import java.util.List;
 

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.shop.entity.QShop.shop;
-import static com.example.user.entity.QUser.user;
 import static com.example.order.entity.QOrder.order;
 import static com.example.review.entity.QReview.review;
+import static com.example.shop.entity.QShop.shop;
+import static com.example.user.entity.QUser.user;
 
 @Repository
 class ReviewQueryRepositoryImpl implements ReviewQueryRepository {

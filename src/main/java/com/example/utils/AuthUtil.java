@@ -3,9 +3,8 @@ package com.example.utils;
 import com.example.security.UserDetailsImpl;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.GrantedAuthority;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 

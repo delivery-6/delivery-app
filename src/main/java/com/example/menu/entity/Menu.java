@@ -1,6 +1,5 @@
 package com.example.menu.entity;
 
-import com.example.menu.dto.request.MenuCreateRequestDto;
 import com.example.menu.dto.request.MenuUpdateRequestDto;
 import com.example.shop.entity.Shop;
 import jakarta.persistence.*;

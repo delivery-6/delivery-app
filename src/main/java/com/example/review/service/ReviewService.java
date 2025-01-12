@@ -4,8 +4,8 @@ import com.example.order.entity.Order;
 import com.example.order.repository.OrderRepository;
 import com.example.review.dto.request.ReviewCreateRequestDto;
 import com.example.review.dto.request.ReviewUpdateRequestDto;
-import com.example.review.dto.response.ReviewResponseSimpleDto;
 import com.example.review.dto.response.ReviewResponseDetailDto;
+import com.example.review.dto.response.ReviewResponseSimpleDto;
 import com.example.review.entity.Review;
 import com.example.review.repository.ReviewRepository;
 import com.example.shop.repository.ShopRepository;
@@ -20,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})

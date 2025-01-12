@@ -5,13 +5,10 @@ import com.example.order.entity.OrderMenu;
 import com.example.utils.QuerydslUtil;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
-import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 import static com.example.menu.entity.QMenu.menu;
 import static com.example.order.entity.QOrder.order;

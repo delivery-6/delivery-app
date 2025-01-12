@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import static com.example.menu.entity.QMenu.menu;
 import static com.example.shop.entity.QShop.shop;
 
 @Repository

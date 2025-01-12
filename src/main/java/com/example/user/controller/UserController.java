@@ -6,6 +6,7 @@ import com.example.user.dto.RegisterResponseDto;
 import com.example.user.entity.User;
 import com.example.user.service.UserService;
 import com.example.utils.AuthUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody RegisterRequestDto request) {
+    public ResponseEntity<RegisterResponseDto> registerUser(@Valid @RequestBody RegisterRequestDto request) {
         // 회원가입 처리
         User user = userService.registerUser(request.getEmail(), request.getPassword(), request.getRole());
 

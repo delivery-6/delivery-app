@@ -3,6 +3,6 @@ services:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: sparta-delivery-app
+      MYSQL_DATABASE: sparta_delivery_app
     ports:
       - "3306:3306"

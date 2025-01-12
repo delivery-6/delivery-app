@@ -1,6 +1,8 @@
 package com.example.auth.service;
 
 import com.example.auth.dto.LoginRequestDto;
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.JwtUtil;
@@ -19,11 +21,11 @@ public class AuthService {
     public String authenticate(LoginRequestDto authRequest) {
         // 사용자 정보 로드
         User user = userRepository.findByEmail(authRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> CustomException.of(ErrorCode.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다."));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw CustomException.of(ErrorCode.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다.");
         }
 
         // JWT 토큰 생성

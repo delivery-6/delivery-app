@@ -19,5 +19,5 @@ public class RegisterRequestDto {
     private final String password;
 
     @NotNull(message = "Role is required")
-    private final Role role;
+    private final String role;
 }

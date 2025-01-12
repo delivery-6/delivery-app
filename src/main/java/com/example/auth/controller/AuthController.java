@@ -2,6 +2,7 @@ package com.example.auth.controller;
 
 import com.example.auth.dto.LoginRequestDto;
 import com.example.auth.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDto authRequest) {
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequestDto authRequest) {
         // AuthService를 통해 인증 및 토큰 생성
         String token = authService.authenticate(authRequest);
 

@@ -2,8 +2,13 @@ package com.example.order.repository;
 
 import com.example.order.entity.Order;
 import com.example.order.entity.OrderMenu;
+import com.example.utils.QuerydslUtil;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
+import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,22 +24,22 @@ class OrderQueryRepositoryImpl implements OrderQueryRepository {
     private final JPQLQueryFactory queryFactory;
 
     @Override
-    public List<Order> findAllByUserId(int id) {
-        return queryFactory
+    public Page<Order> findAllByUserId(Pageable pageable, int id) {
+        JPQLQuery<Order> query = queryFactory
                 .selectFrom(order)
                 .join(order.user, user).fetchJoin()
-                .where(order.user.id.eq(id))
-                .fetch();
+                .where(order.user.id.eq(id));
+        return QuerydslUtil.fetchPage(query, order, pageable);
     }
 
     @Override
-    public List<Order> findAllByShopId(int id) {
-        return queryFactory
+    public Page<Order> findAllByShopId(Pageable pageable, int id) {
+        JPQLQuery<Order> query = queryFactory
                 .selectFrom(order)
                 .join(order.orderMenus, orderMenu).fetchJoin()
                 .join(order.user).fetchJoin()
-                .where(orderMenu.menu.shop.id.eq(id))
-                .fetch();
+                .where(orderMenu.menu.shop.id.eq(id));
+        return QuerydslUtil.fetchPage(query, order, pageable);
     }
 
     @Override
@@ -46,11 +51,11 @@ class OrderQueryRepositoryImpl implements OrderQueryRepository {
     }
 
     @Override
-    public List<OrderMenu> findAllOrderMenusByOrderId(int id) {
-        return queryFactory
+    public Page<OrderMenu> findAllOrderMenusByOrderId(Pageable pageable, int id) {
+        JPQLQuery<OrderMenu> query = queryFactory
                 .selectFrom(orderMenu)
                 .join(orderMenu.menu, menu).fetchJoin()
-                .where(orderMenu.order.id.eq(id))
-                .fetch();
+                .where(orderMenu.order.id.eq(id));
+        return QuerydslUtil.fetchPage(query, orderMenu, pageable);
     }
 }

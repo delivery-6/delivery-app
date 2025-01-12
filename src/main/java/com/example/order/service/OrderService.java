@@ -11,6 +11,8 @@ import com.example.order.repository.OrderRepository;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +35,10 @@ public class OrderService {
         return OrderResponseDto.from(order);
     }
 
-    public List<OrderResponseDto> findAll() {
-        return orderRepository.findAllByUserId(getAuthUser().getId())
-                .stream()
+    public Page<OrderResponseDto> findAll(PageQuery pageQuery) {
+        return Page.from(orderRepository.findAllByUserId(pageQuery.toPageable(), getAuthUser().getId())
                 .map(OrderResponseDto::from)
-                .collect(Collectors.toList());
+        );
     }
 
     public OrderResponseDto create(OrderCreateRequestDto dto) {

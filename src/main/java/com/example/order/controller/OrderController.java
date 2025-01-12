@@ -4,6 +4,8 @@ import com.example.order.dto.request.OrderCreateRequestDto;
 import com.example.order.dto.request.OrderUpdateRequestDto;
 import com.example.order.dto.response.OrderResponseDto;
 import com.example.order.service.OrderService;
+import com.example.utils.Page;
+import com.example.utils.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDto>> findAll(){
-        return ResponseEntity.ok(orderService.findAll());
+    public ResponseEntity<Page<OrderResponseDto>> findAll(PageQuery pageQuery){
+        return ResponseEntity.ok(orderService.findAll(pageQuery));
     }
 
     @PostMapping
@@ -42,15 +44,4 @@ public class OrderController {
     ){
         return ResponseEntity.ok(orderService.update(id, dto));
     }
-
 }
-
-
-/**
- * 1. 주문내역도 주문도메인안에서 같이 처리해도 되는지
- *          A: 걍 order 를 주문내역이랑 똑같이 써버려도 되는데 왜 그렇게 함
- *          ?: order, menu 가 데이터 엄청 겹치지않을까
- *          A: 알빠노
- * 2. 주문 컨트롤러 가게 입장과 고객 입장을 나눠서 구현해야되나
- *          A: 필수기능은 고객입장임
- */

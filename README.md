@@ -34,25 +34,24 @@
 </table>
 
 ## 🧾 API 명세서
-| Method | 기능       | URL                               | Request                                                                     | Response                                                                                                   |
-|--------|----------|-----------------------------------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
-| POST   | 사용자 생성   | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                        | {<br>email,<br>created_at,<br>updated_at<br>}                                                              |
-| DELETE | 사용자 삭제   | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                        | 계정 삭제가 완료되었습니다.                                                                                            |
-| POST   | 로그인      | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                        | {name} 님이 로그인 되었습니다.                                                                                       |
-| POST   | 로그아웃     | /api/users                        |                                                                             | 로그아웃 완료되었습니다.                                                                                              |
-| POST   | 점포 생성    | /api/shops                        | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕                             | {<br>id,<br>user,<br>name<br>}                                                                             |
-| PATCH  | 점포 수정    | /api/shops/{id}                   | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음 | {<br>id,<br>user,<br>name<br>}                                                                             |
-| PATCH  | 점포 조회    | /api/shops                        | RequestParam<br><br>user → 필수  ❌<br>name → 필수  ❌                            | {<br>“content”: [ {<br>id,<br>user,<br>name,<br>created_at,<br>updated_at<br>} ],<br>“pageInfo” : { }<br>} |
-| DELETE | 점포 삭제    | /api/shops/{id}                   | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕                             | 삭제가 완료되었습니다.                                                                                               |
-| POST   | 메뉴 생성    | /api/shops/{shopId}/menu          | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| PATCH  | 메뉴 수정    | /api/shops/{shopId}/menu/{menuId} | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| GET    | 특정 메뉴 조회 | /api/shops/{shopId}/menu          | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| DELETE    | 메뉴 삭제    | /api/shops/{shopId}/menu/{menuId} | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| POST  | 리뷰 생성    | /api/shops/{shopId}/reviews       | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| PATCH  | 리뷰수정     | /api/reviews/{reviewId}           | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| GET  | 리뷰 조회    | /api/shops/{shopId}/page/{page}   | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| DELETE  | 리뷰 삭제    | /api/reviews/{reviewId}           | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
-| POST  | 주문 생성    | /api/orders                       | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음            | {<br>name,<br>price<br>}                                                                                   |
+| Method | 기능       | URL                               | Request                                                                                       | Response                                                                                                   |
+|--------|----------|-----------------------------------|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| POST   | 사용자 생성   | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                                          | {<br>email,<br>created_at,<br>updated_at<br>}                                                              |
+| DELETE | 사용자 삭제   | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                                          | 계정 삭제가 완료되었습니다.                                                                                            |
+| POST   | 로그인      | /api/users                        | RequestBody<br><br>email → 필수  ⭕<br>password → 필수  ⭕                                          | {name} 님이 로그인 되었습니다.                                                                                       |
+| POST   | 로그아웃     | /api/users                        |                                                                                               | 로그아웃 완료되었습니다.                                                                                              |
+| POST   | 점포 생성    | /api/shops                        | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕                                               | {<br>id,<br>user,<br>name<br>}                                                                             |
+| PATCH  | 점포 수정    | /api/shops/{id}                   | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음                  | {<br>id,<br>user,<br>name<br>}                                                                             |
+| PATCH  | 점포 조회    | /api/shops                        | RequestParam<br><br>user → 필수  ❌<br>name → 필수  ❌                                              | {<br>“content”: [ {<br>id,<br>user,<br>name,<br>created_at,<br>updated_at<br>} ],<br>“pageInfo” : { }<br>} |
+| DELETE | 점포 삭제    | /api/shops/{id}                   | RequestBody<br><br>user → 필수  ⭕<br>name → 필수  ⭕                                               | 삭제가 완료되었습니다.                                                                                               |
+| POST   | 메뉴 생성    | /api/shops/{shopId}/menu          | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음 | {<br>name,<br>price<br>}                                                                                   |
+| PATCH  | 메뉴 수정    | /api/shops/{shopId}/menu/{menuId} | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음 | {<br>name,<br>price<br>}                                                                                   |
+| DELETE    | 메뉴 삭제    | /api/shops/{shopId}/menu/{menuId} | RequestBody<br><br>shop → 필수  ⭕<br>name → 필수  ⭕<br>price → 필수  ⭕<br><br>수정 전/후가 같을 경우 수정되지 않음 | 삭제가 완료되었습니다.                                                                                               |
+| POST  | 리뷰 생성    | /api/shops/{shopId}/reviews       | RequestBody<br><br>user  → 필수  ⭕<br>description → 필수  ⭕                                       | 리뷰가 생성되었습니다.                                                                                               |
+| PATCH  | 리뷰수정     | /api/reviews/{reviewId}           | RequestBody<br><br>user  → 필수  ⭕<br>description → 필수  ⭕                                       | 수정이 완료되었습니다.                                                                                               |
+| GET  | 리뷰 조회    | /api/shops/{shopId}/page/{page}   | RequestParam<br><br>user → 필수  ❌<br>description → 필수  ❌                                              | {<br>userName,<br>rating,<br>decription,<br>createAt,<br>updateAt,<br>}                                    |
+| DELETE  | 리뷰 삭제    | /api/reviews/{reviewId}           | RequestBody<br><br>user → 필수  ⭕ | 삭제 완료되었습니다.                                                                                                |
+| POST  | 주문 생성    | /api/orders                       |  |   |
 
 ## 📂 ERD Diagram
 ![ERD 다이어그램](https://ifh.cc/g/tmpkq4.jpg)
@@ -75,8 +74,6 @@
 ![Mac os](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![windows](https://img.shields.io/badge/Windows_11-008080?style=for-the-badge&logo=windows-95&logoColor=white)
 
-### Blog
-
 <br>
 
 ## 💻 Program operation screen
@@ -87,15 +84,6 @@
 ### 📍 실행 화면
 
 </details>
-
-
-
-## ☄️ Major functional code
-
-### 
-```java
-
-```
 
 <br>
 
@@ -253,3 +241,4 @@
 
 
 ## 🛠️ Trouble shooting
+[☄️ 최순우 트러블 슈팅 바로가기](https://promicing.com/blog/43/)

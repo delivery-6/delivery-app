@@ -102,7 +102,8 @@
 ## 📂 Architecture
 
 ```java
-📂 DeliveryApp
+📦 DeliveryApp
+│
 ├─ 📂 auth
 │    ├─ 📂 controller
 │    │    └─ AuthController.java
@@ -196,12 +197,57 @@
 │    ├─ UserDetailsImpl.java
 │    └─ UserDetailsServiceImpl.java
 │
-└─
-
-
-
-
-           └─ Main.java
+├─ 📂 shop
+│    │
+│    ├─ 📂 controller
+│    │    └─ ShopController.java
+│    │
+│    ├─ 📂 dto
+│    │    │
+│    │    ├─ 📂 request
+│    │    │    ├─ ShopCreateRequestDto.java
+│    │    │    └─ ShopUpdateRequestDto.java
+│    │    │
+│    │    └─ 📂 response
+│    │         ├─ ShopCreateRequestDto.java
+│    │         ├─ ShopReadRequestDto.java
+│    │         └─ ShopUpdateRequsetDto.java
+│    │
+│    ├─ 📂 entity
+│    │    └─ Shop.java
+│    │
+│    ├─ 📂 repository
+│    │    ├─ ShopRepository.java
+│    │    ├─ ShopRepositoryCustom.java
+│    │    └─ ShopRepositoryCustomImpl.java
+│    │
+│    └─ 📂service
+│         └─ ShopService.java
+│
+├─ 📂 shop
+│    │
+│    ├─ 📂 controller
+│    │    └─ UserController.java
+│    │
+│    ├─ 📂 dto
+│    │    │
+│    │    ├─ MeResponseDto.java
+│    │    ├─ RegisterRequestDto.java
+│    │    └─ RegisterResponseDto.java
+│    │
+│    ├─ 📂 entity
+│    │    ├─ Role.java
+│    │    └─ User.java
+│    │
+│    ├─ 📂 repository
+│    │    └─ UserRepository.java
+│    │
+│    └─ 📂service
+│         └─ UserService.java
+│
+└─ 📂 Utils
+     ├─ AuthUtil.java
+     └─ JwtUtil.java
 
 ```
 

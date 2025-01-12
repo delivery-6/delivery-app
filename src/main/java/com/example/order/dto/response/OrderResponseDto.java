@@ -1,5 +1,7 @@
 package com.example.order.dto.response;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.order.entity.Order;
 
 import java.util.Map;
@@ -16,8 +18,11 @@ public record OrderResponseDto(
         return new OrderResponseDto(
                 order.getId(),
                 order.getUser().getName(),
-                //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
-                order.getOrderMenus().stream().findFirst().orElseThrow(() -> new IllegalArgumentException("")).getMenu().getShop().getName(),
+                order.getOrderMenus().stream().findFirst()
+                        .orElseThrow(() -> CustomException.of(ErrorCode.BAD_REQUEST, "Cannot found any menu in this Order with ID: " + order.getId()))
+                        .getMenu()
+                        .getShop()
+                        .getName(),
                 order.getOrderMenus().stream()
                         .collect(Collectors.toMap(
                                 orderMenu -> orderMenu.getMenu().getName(),

@@ -1,5 +1,7 @@
 package com.example.order.service;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.menu.entity.Menu;
 import com.example.menu.repository.MenuRepository;
 import com.example.order.dto.request.OrderCreateRequestDto;
@@ -29,23 +31,22 @@ public class OrderService {
     private UserRepository userRepository;
 
     public OrderResponseDto find(int id) {
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Order with ID: " + id));
         return OrderResponseDto.from(order);
     }
 
     public Page<OrderResponseDto> findAll(PageQuery pageQuery) {
         return Page.from(orderRepository.findAllByUserId(pageQuery.toPageable(), getAuthUser().getId())
-                .map(OrderResponseDto::from)
-        );
+                .map(OrderResponseDto::from));
     }
 
     public OrderResponseDto create(OrderCreateRequestDto dto) {
         // DTO 에 있는 메뉴와 갯수 묶음을 Map<Menu, int> 형태로 변환합니다.
         Map<Menu, Integer> menuInfo = new HashMap<>();
-        for(var keyValue : dto.menuInfo().entrySet()) {
-            //TODO: GlobalExceptionHandler 구현 후 수정
-            Menu menu = menuRepository.findById(keyValue.getKey()).orElseThrow(() ->
-                    new IllegalArgumentException("Menu not found with ID: " + keyValue.getKey()));
+        for (var keyValue : dto.menuInfo().entrySet()) {
+            Menu menu = menuRepository.findById(keyValue.getKey())
+                    .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Menu with ID: " + keyValue.getKey()));
             menuInfo.put(menu, keyValue.getValue());
         }
 
@@ -55,8 +56,8 @@ public class OrderService {
     }
 
     public OrderResponseDto update(int id, OrderUpdateRequestDto dto) {
-        //TODO: GlobalExceptionHandler 구현 후 수정
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Order with ID: " + id));
 
         order.updateState(OrderState.of(dto.status()));
         order = orderRepository.save(order);
@@ -64,10 +65,7 @@ public class OrderService {
     }
 
     private User getAuthUser() {
-        //TODO: GlobalExceptionHandler 구현 후 수정
         return userRepository.findById(AuthUtil.getId())
-                .orElseThrow(() ->
-                        new NullPointerException("User not found with ID: " + AuthUtil.getId())
-                );
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "User not found with ID: " + AuthUtil.getId()));
     }
 }

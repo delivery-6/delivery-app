@@ -1,5 +1,8 @@
 package com.example.order.entity;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
+
 public enum OrderState {
     NONE(0),
     ORDERED(1),
@@ -21,12 +24,12 @@ public enum OrderState {
                 return type;
             }
         }
-        //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
-        throw new IllegalArgumentException("No OrderState with id: " + id);
+
+        throw CustomException.of(ErrorCode.BAD_REQUEST, "No OrderState with id: " + id);
     }
 
     public static boolean isUpdatable(OrderState from, OrderState to) {
-        if(from == OrderState.REJECTED || from == OrderState.CANCELED)
+        if (from == OrderState.REJECTED || from == OrderState.CANCELED)
             return false;
         return from.id < to.id;
     }

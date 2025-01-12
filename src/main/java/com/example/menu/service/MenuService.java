@@ -1,5 +1,7 @@
 package com.example.menu.service;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.menu.dto.request.MenuCreateRequestDto;
 import com.example.menu.dto.request.MenuUpdateRequestDto;
 import com.example.menu.dto.response.MenuResponseDetailDto;
@@ -7,6 +9,7 @@ import com.example.menu.dto.response.MenuResponseSimpleDto;
 import com.example.menu.entity.Menu;
 import com.example.menu.repository.MenuRepository;
 import com.example.shop.entity.Shop;
+import com.example.shop.repository.ShopRepository;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
 import com.example.utils.AuthUtil;
@@ -22,10 +25,12 @@ public class MenuService {
     private MenuRepository menuRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ShopRepository shopRepository;
 
     public MenuResponseDetailDto find(int id) {
-        //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
-        Menu menu = menuRepository.findById(id).orElseThrow();
+        Menu menu = menuRepository.findById(id)
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Menu with ID: " + id));
 
         return MenuResponseDetailDto.from(menu);
     }
@@ -33,29 +38,22 @@ public class MenuService {
     public Page<MenuResponseSimpleDto> findAll(PageQuery page, int shopId) {
         return Page.from(
                 menuRepository.findAllByShopId(page.toPageable(), shopId)
-                        .map(MenuResponseSimpleDto::from)
-        );
+                        .map(MenuResponseSimpleDto::from));
     }
 
     public MenuResponseDetailDto create(
             int shopId,
             MenuCreateRequestDto dto
     ) {
-        /**
-         * TODO: ShopRepository 가 완성 후, 수정해야합니다.
-         * TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
-         * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
-         **/
-        Shop shop = new Shop();
-        if (shop.getUser().getId() != getAuthUser().getId()) {
-            throw new IllegalArgumentException(
-                    "Only the owner of the shop '" + shop.getName() + "' is allowed to add menus."
-            );
-        }
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Shop with ID: " + shopId));
+
+        if (shop.getUser().getId() != getAuthUser().getId())
+            throw CustomException.of(ErrorCode.UNAUTHORIZED,
+                    "Only the owner of the shop '" + shop.getName() + "' is allowed to add menus.");
 
         Menu menu = menuRepository.save(
-                Menu.from(shop, dto.name(), dto.price())
-        );
+                Menu.of(shop, dto.name(), dto.price()));
         return MenuResponseDetailDto.from(menu);
     }
 
@@ -63,16 +61,13 @@ public class MenuService {
             int menuId,
             MenuUpdateRequestDto dto
     ) {
-        /**
-         * TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
-         * Shop shop = shopRepository.findById(dto.shopId).orElseThrow();
-         **/
-        Menu menu = menuRepository.findById(menuId).orElseThrow();
-        if (menu.getShop().getUser().getId() != getAuthUser().getId()) {
-            throw new IllegalArgumentException(
-                    "Only the owner of the shop '" + menu.getShop().getName() + "' is allowed to update menu."
-            );
-        }
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "Cannot found Menu with ID: " + menuId));
+
+        if (menu.getShop().getUser().getId() != getAuthUser().getId())
+            throw CustomException.of(ErrorCode.UNAUTHORIZED,
+                    "Only the owner of the shop '" + menu.getShop().getName() + "' is allowed to update menu.");
+
         menu = menuRepository.save(menu.partialUpdate(dto));
         return MenuResponseDetailDto.from(menu);
     }
@@ -82,10 +77,7 @@ public class MenuService {
     }
 
     private User getAuthUser() {
-        //TODO: GlobalExceptionHandler 구현 후, 에러핸들링 구현 예정입니다.
         return userRepository.findById(AuthUtil.getId())
-                .orElseThrow(() ->
-                        new NullPointerException("User not found with ID: " + AuthUtil.getId())
-                );
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "User not found with ID: " + AuthUtil.getId()));
     }
 }

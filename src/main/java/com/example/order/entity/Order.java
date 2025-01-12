@@ -1,5 +1,7 @@
 package com.example.order.entity;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.menu.entity.Menu;
 import com.example.user.entity.User;
 import jakarta.persistence.*;
@@ -43,13 +45,11 @@ public class Order {
 
     public Order(User user) {
         this.user = user;
-        this.state = OrderState.NONE;
     }
 
     public void updateState(OrderState state) {
         if (OrderState.isUpdatable(this.state, state))
-            //TODO: GlobalExceptionHandler 구현 후 수정예정입니다.
-            throw new IllegalStateException("OrderState cannot be update from " + this.state + " to " + state);
+            throw CustomException.of(ErrorCode.BAD_REQUEST, "OrderState cannot be update from " + this.state + " to " + state);
         this.state = state;
     }
 

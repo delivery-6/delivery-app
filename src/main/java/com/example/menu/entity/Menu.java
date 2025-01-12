@@ -55,8 +55,7 @@ public class Menu {
         return this;
     }
 
-    //DTO 를 Entity 로 바꾸기 위한 Util method
-    public static Menu from(
+    public static Menu of(
             Shop shop,
             String name,
             int price

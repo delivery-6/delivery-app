@@ -1,5 +1,7 @@
 package com.example.shop.service;
 
+import com.example.exception.CustomException;
+import com.example.exception.ErrorCode;
 import com.example.menu.dto.response.MenuResponseDetailDto;
 import com.example.menu.repository.MenuRepository;
 import com.example.shop.dto.request.ShopCreateRequestDto;
@@ -32,7 +34,7 @@ public class ShopService {
     public ShopReadResponseDto find(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("'" + id + "' 가게를 찾을 수 없습니다.");
+            throw CustomException.of(ErrorCode.NOT_FOUND, "'" + id + "' 가게를 찾을 수 없습니다.");
         }
         return ShopReadResponseDto.from(shop, menuRepository);
     }
@@ -48,15 +50,15 @@ public class ShopService {
     // 가게 생성
     public ShopReadResponseDto create(ShopCreateRequestDto dto) {
         User user = userRepository.findById(AuthUtil.getId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다." + AuthUtil.getId()));
+                .orElseThrow(() -> CustomException.of(ErrorCode.NOT_FOUND, "사용자를 찾을 수 없습니다." + AuthUtil.getId()));
 
         if (user.getRole() != Role.OWNER) {
-            throw new IllegalArgumentException("가게를 생성할 권한이 없습니다.");
+            throw CustomException.of(ErrorCode.FORBIDDEN, "가게를 생성할 권한이 없습니다.");
         }
 
         long shopCount = shopRepository.countByUserAndIsDeletedFalse(user);
         if (shopCount >= 3) {
-            throw new IllegalArgumentException("최대 3개의 상점만 만들 수 있습니다.");
+            throw CustomException.of(ErrorCode.CONFLICT, "최대 3개의 상점만 만들 수 있습니다.");
         }
 
         Shop shop = new Shop(user, dto.name(), dto.openedAt(), dto.closedAt(), dto.minOrderPrice());
@@ -69,7 +71,7 @@ public class ShopService {
     public ShopReadResponseDto partialUpdate(int id, ShopUpdateRequestDto dto) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("'" + id + "' 가게를 찾을 수 없습니다.");
+            throw CustomException.of(ErrorCode.NOT_FOUND, id + "' 가게를 찾을 수 없습니다.");
         }
 
         shop.updateDetails(dto.name(), dto.openedAt(), dto.closedAt(), dto.minOrderPrice());
@@ -81,7 +83,7 @@ public class ShopService {
     public void delete(int id) {
         Shop shop = shopRepository.findActiveById(id);
         if (shop == null) {
-            throw new IllegalArgumentException("ID '" + id + "'에 해당하는 가게를 찾을 수 없습니다.");
+            throw CustomException.of(ErrorCode.NOT_FOUND, "ID '" + id + "'에 해당하는 가게를 찾을 수 없습니다.");
         }
 
         String shopName = shop.getName();

@@ -27,7 +27,7 @@
     <tr>
       <td align="center"><a href=""><img src="https://ifh.cc/g/9jJJ2z.jpg" width="200px;" alt=""/><br><sub><b>팀장 : 박지안</b></sub></a><br></td>
       <td align="center"><a href=""><img src="https://ifh.cc/g/H4wKvC.jpg" width="200px;" alt="배달의 민족 안경잡고 있는 이미지"/><br><sub><b>팀원 : 우혁규</b></sub></a><br></td>
-      <td align="center"><a href=""><img src="https://ifh.cc/g/hlaxNM.jpg" width="200px;" alt="배달의 민족 장갑끼고 있는 이미지"/><br><sub><b>팀원 : 문규민</b></sub></a><br></td>
+      <td align="center"><a href=""><img src="https://ifh.cc/g/hlaxNM.jpg" width="200px;" alt="배달의 민족 장갑끼고 있는 이미지"/><br><sub><b></b></sub></a><br></td>
       <td align="center"><a href=""><img src="https://ifh.cc/g/oqcr13.jpg" width="200px;" alt=""/><br><sub><b>팀원 : 최순우</b></sub></a><br></td>
    </tr>
   </tbody>
@@ -230,6 +230,4 @@
 
 
 ## 🛠️ Trouble shooting
-[☄️ 문규민 트러블 슈팅 바로가기](https://velog.io/@alia/%EB%AC%B8%EC%A0%9C%EB%8A%94-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%95%84%EB%8B%8C-%EC%9D%91%EB%8B%B5-%EC%88%A8%EA%B2%A8%EC%A7%84-403-%EC%98%A4%EB%A5%98%EC%9D%98-%ED%95%A8%EC%A0%95)
-<br>
 [☄️ 최순우 트러블 슈팅 바로가기](https://promicing.com/blog/43/)
